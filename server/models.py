@@ -15,7 +15,7 @@ class List(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "tasks": self.tasks
+            "tasks": [task.to_dict() for task in self.tasks]
         }
 
 
@@ -27,7 +27,7 @@ class Task(db.Model):
         nullable=False)
     title = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
-    is_complete = db.Column(db.Boolean, default=False)
+    is_complete = db.Column(db.Boolean)
 
     list = db.relationship('List',
         backref=db.backref('tasks', lazy=True))
@@ -41,7 +41,7 @@ class Task(db.Model):
             "title": self.title,
             "description": self.description,
             "isComplete": self.is_complete,
-            "comments": self.comments
+            "comments": [comment.to_dict() for comment in self.comments]
         }
 
 

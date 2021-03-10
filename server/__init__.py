@@ -10,6 +10,9 @@ from .models import *
 
 from .config import Config
 
+from .api.list_routes import list_routes
+
+
 
 app = Flask(__name__)
 
@@ -18,6 +21,8 @@ app.config.from_object(Config)
 db.init_app(app)
 Migrate(app, db)
 
+
+app.register_blueprint(list_routes, url_prefix="/api/lists")
 
 CORS(app)
 
