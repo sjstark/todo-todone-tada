@@ -1,7 +1,9 @@
+import os
+
 from flask import Flask, request, session, redirect
 from flask_cors import CORS
 from flask_migrate import Migrate
-# from flask_wtf.crsf import CSRFProtect, generate_csrf
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_sqlalchemy import SQLAlchemy
 
 from .models import *
@@ -17,7 +19,6 @@ db.init_app(app)
 Migrate(app, db)
 
 
-
 CORS(app)
 
 
@@ -30,17 +31,17 @@ def https_redirect():
             return redirect(url, code=code)
 
 
-# @app.after_request
-# def inject_csrf_token(response):
-#     response.set_cooke('csrf_token',
-#                         generate_csrf(),
-#                         secure=True if os.engiron.get(
-#                             "FLASK_ENV") == "production" else False,
-#                         samesite="Strict" if os.environ.get(
-#                             "FLASK_ENV") == "production" else None,
-#                         httpsonly=True
-#                         )
-#     return response
+@app.after_request
+def inject_csrf_token(response):
+    response.set_cookie('csrf_token',
+                        generate_csrf(),
+                        secure=True if os.environ.get(
+                            "FLASK_ENV") == "production" else False,
+                        samesite="Strict" if os.environ.get(
+                            "FLASK_ENV") == "production" else None,
+                        httponly=True
+                        )
+    return response
 
 
 @app.route('/', defaults={"path": ""})
