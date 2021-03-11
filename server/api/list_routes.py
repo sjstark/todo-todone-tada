@@ -70,7 +70,6 @@ def update_list_by_id(list_id):
             return list.to_dict()
     return {'errors': ['The requested list does not exist']}, 404
 
-
 @list_routes.route('/<int:list_id>/tasks', methods=["GET"])
 def get_all_tasks(list_id):
     """
@@ -121,6 +120,36 @@ def get_all_comments(list_id, task_id):
     """
     GETs all comments for a task and returns as JSON
     """
-    # lists = List.query.all()
-    # data = [list.to_dict() for list in lists]
-    return "Hello Comment"
+    if task_id:
+        comments = Comment.query.filter_by(task_id=task_id).all()
+        data = [comment.to_dict() for comment in comments]
+        return jsonify(data)
+    return {'errors': 'There was an error with your request'}, 400
+
+@list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments', methods=["POST"])
+def get_all_comments(list_id, task_id):
+    if task_id:
+        task = List.query.get(task_id)
+        if task:
+            form = TaskCreateFrom()
+            form['csrf_token'].data = request.cookies['csrf_token']
+
+            if form.validate_on_submit():
+                comment = Comment(
+                    task = task,
+                    text = form.text.data
+                )
+                db.session.add(comment)
+                db.session.commit()
+                return comment.to_dict()
+            return {'errors': validation_errors_to_error_messages(form.errors)}, 400
+    return {'errors': 'There was an error with your request'}, 400
+
+@list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments/<int:comment_id>', methods=["DELETE"])
+def get_all_comments(list_id, task_id, comment_id):
+    if comment_id:
+        task = Task.query.get(comment_id)
+        db.session.delete(task)
+        db.session.commit()
+        return 'success'
+    return {'errors': 'There was an error with your request'}, 400

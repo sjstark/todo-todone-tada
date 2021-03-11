@@ -24,6 +24,7 @@ Migrate(app, db)
 
 app.register_blueprint(list_routes, url_prefix="/api/lists")
 
+
 CORS(app)
 
 
