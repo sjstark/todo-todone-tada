@@ -93,6 +93,30 @@ export const deleteList = (listId) => {
   }
 }
 
+export const addTask = (task, listId) => {
+  return async dispatch => {
+    const formData = new FormData();
+    formData.append('title', task.title)
+    formData.append('description', task.description)
+
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+
+    const res = await Axios.post(`/api/lists/${listId}/tasks`, formData, config)
+      .then(res => {
+        const list = res.data;
+        return dispatch(_updateList(list))
+      })
+      .catch((err) => {
+        return err.response
+      })
+
+  }
+}
+
 
 // THIS IS A BAD WAY OF HANDLING THIS,
 // I WOULD RATHER GO BACK AND CHANGE THIS TO BE A DICTIONARY

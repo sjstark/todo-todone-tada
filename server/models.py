@@ -30,7 +30,8 @@ class Task(db.Model):
     is_complete = db.Column(db.Boolean)
 
     list = db.relationship('List',
-        backref=db.backref('tasks', lazy=True))
+        backref=db.backref('tasks', lazy=True, cascade="all, delete-orphan"),
+    )
 
     def __repr__(self):
         return '<Task %r>' % self.title
@@ -54,7 +55,8 @@ class Comment(db.Model):
     text = db.Column(db.String(250), nullable=False)
 
     task = db.relationship('Task',
-        backref=db.backref('comments', lazy=True))
+        backref=db.backref('comments', lazy=True, cascade="all, delete-orphan"),
+    )
 
     def __repr__(self):
         return '<Comment #%r>' % self.id

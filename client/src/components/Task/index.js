@@ -21,6 +21,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 
 export default function Task({ task }) {
@@ -98,7 +99,7 @@ export default function Task({ task }) {
           {comments && comments.map(comment => (
             <ListItem key={comment.id}>
               <ListItemText>
-                {comment.text}
+                {`•\t${comment.text}`}
               </ListItemText>
             </ListItem>
           ))}

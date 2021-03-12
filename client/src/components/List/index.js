@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { updateList, deleteList } from '../../store/list'
+import { updateList, deleteList, addTask } from '../../store/list'
 
 import {
   Typography,
@@ -33,7 +33,7 @@ export default function ListElement({ list }) {
   const [openAdd, setOpenAdd] = useState(false)
 
   const [title, setTitle] = useState(list.title)
-  const [taskTitle, setTaskTitle] = useState("")
+  const [task, setTask] = useState({ title: "", description: "" })
 
   const handleCloseEdit = () => {
     setOpenEdit(false)
@@ -49,7 +49,7 @@ export default function ListElement({ list }) {
   }
 
   const handleTaskCreate = () => {
-    console.log(taskTitle)
+    dispatch(addTask(task, list.id))
     handleCloseAdd()
   }
 
@@ -123,11 +123,17 @@ export default function ListElement({ list }) {
           <DialogTitle>{`Add a task to ${list.title}`}</DialogTitle>
           <DialogContent>
             <TextField
-              autoFocus
-              margin="dense"
+
               label="Task Title"
-              value={taskTitle}
-              onChange={({ target }) => { setTaskTitle(target.value) }}
+              value={task.title}
+              onChange={({ target }) => { setTask({ ...task, title: target.value }) }}
+              type="text"
+              fullWidth
+            />
+            <TextField
+              label="Task Description"
+              value={task.description}
+              onChange={({ target }) => { setTask({ ...task, description: target.value }) }}
               type="text"
               fullWidth
             />

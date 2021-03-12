@@ -106,12 +106,12 @@ def create_new_task(list_id):
                     list = list,
                     title = form.title.data,
                     description = form.description.data,
-                    is_complete = form.isComplete.data
+                    is_complete = False
                 )
 
                 db.session.add(task)
                 db.session.commit()
-                return task.to_dict()
+                return list.to_dict()
             return {'errors': validation_errors_to_error_messages(form.errors)}, 400
     return {'errors': 'There was an error with your request'}, 400
 
