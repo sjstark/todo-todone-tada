@@ -64,7 +64,7 @@ def update_list_by_id(list_id):
 
             if form.validate_on_submit():
                 list.title = form.data['title']
-                db.sesion.commit()
+                db.session.commit()
             else:
                 return {'errors': validation_errors_to_error_messages(form.errors)}, 400
             return list.to_dict()

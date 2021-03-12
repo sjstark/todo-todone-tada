@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { loadLists } from './store/list';
 import { useDispatch, connect } from 'react-redux'
 
-import List from './components/List'
+import { Box, Container, Typography } from '@material-ui/core'
+
+import ListElement from './components/List'
 import AddList from './components/AddList'
 
 function App({ lists }) {
@@ -13,13 +15,15 @@ function App({ lists }) {
   }, [dispatch])
 
   return (
-    <>
-      <h1>To Do, To Done, Ta Da!</h1>
+    <Container maxWidth="md">
+      <Box bgcolor="primary.main" color="white">
+        <Typography align="center" variant="h2" maxWidth="100%">To Do, To Done, Ta Da!</Typography>
+      </Box>
       <AddList />
-      <div className="lists-container">
-        {lists && lists.map((list) => <List list={list} key={list.id} />)}
-      </div>
-    </>
+      <Container>
+        {lists && lists.map((list) => <ListElement list={list} key={list.id} />)}
+      </Container>
+    </Container>
   );
 }
 
