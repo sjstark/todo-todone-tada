@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { toggleTask, deleteTask } from '../../store/list'
+import { toggleTask, deleteTask, createComment, deleteComment } from '../../store/list'
 
 import {
   Button,
@@ -36,6 +36,8 @@ export default function Task({ listId, task }) {
   const [openAdd, setOpenAdd] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
 
+  const [commentText, setCommentText] = useState("")
+
   const { comments } = task
 
   const handleToggle = () => {
@@ -47,11 +49,12 @@ export default function Task({ listId, task }) {
   }
 
   const handleCommentCreate = () => {
-
     closeCommentDialog()
+    dispatch(createComment(listId, task.id, { text: commentText }))
+    setCommentText('')
   }
 
-  const handleDelete = (e) => {
+  const handleTaskDelete = (e) => {
     e.stopPropagation()
     dispatch(deleteTask(listId, task.id))
   }
@@ -59,6 +62,11 @@ export default function Task({ listId, task }) {
   const handleClick = (e) => {
     e.stopPropagation()
     setOpen(!open)
+  }
+
+  const handleCommentDelete = (e, commentId) => {
+    e.stopPropagation()
+    dispatch(deleteComment(listId, task.id, commentId))
   }
 
   return (
@@ -76,7 +84,7 @@ export default function Task({ listId, task }) {
           {task.title}
         </ListItemText>
         <IconButton
-          onClick={handleDelete}
+          onClick={handleTaskDelete}
         >
           <DeleteIcon />
         </IconButton>
@@ -112,6 +120,9 @@ export default function Task({ listId, task }) {
               <ListItemText>
                 {`•\t${comment.text}`}
               </ListItemText>
+              <IconButton onClick={(e) => handleCommentDelete(e, comment.id)}>
+                <DeleteIcon />
+              </IconButton>
             </ListItem>
           ))}
         </List>
@@ -127,6 +138,8 @@ export default function Task({ listId, task }) {
             autoFocus
             margin="dense"
             label="Comment"
+            value={commentText}
+            onChange={({ target }) => { setCommentText(target.value) }}
             type="text"
             fullWidth
           />

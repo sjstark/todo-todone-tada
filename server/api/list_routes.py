@@ -152,16 +152,20 @@ def get_all_comments(list_id, task_id):
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments', methods=["POST"])
 def create_new_comment(list_id, task_id):
     if task_id:
-        task = List.query.get(task_id)
+        task = Task.query.get(task_id)
+        print(task)
         if task:
-            form = TaskCreateFrom()
+            form = CommentCreateFrom()
             form['csrf_token'].data = request.cookies['csrf_token']
+            print(form.text)
 
             if form.validate_on_submit():
+                print('HIT HERE')
                 comment = Comment(
                     task = task,
                     text = form.text.data
                 )
+
                 db.session.add(comment)
                 db.session.commit()
                 return comment.to_dict()
@@ -171,8 +175,8 @@ def create_new_comment(list_id, task_id):
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments/<int:comment_id>', methods=["DELETE"])
 def delete_comment(list_id, task_id, comment_id):
     if comment_id:
-        task = Task.query.get(comment_id)
-        db.session.delete(task)
+        comment = Comment.query.get(comment_id)
+        db.session.delete(comment)
         db.session.commit()
         return 'success'
     return {'errors': 'There was an error with your request'}, 400

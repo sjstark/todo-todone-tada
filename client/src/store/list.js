@@ -147,6 +147,43 @@ export const deleteTask = (listId, taskId) => {
 }
 
 
+export const createComment = (listId, taskId, comment) => {
+  return async dispatch => {
+    const formData = new FormData();
+    formData.append('text', comment.text)
+
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+
+    Axios.post(`/api/lists/${listId}/tasks/${taskId}/comments`, formData, config)
+      .then(res => {
+        // quick reload, in reality we want to update with just the comment.
+        // This would be best done with restructuring the state to be a dictionary
+        return dispatch(loadLists())
+      })
+      .catch((err) => {
+        return err.response
+      })
+
+  }
+}
+
+export const deleteComment = (listId, taskId, commentId) => {
+  return async dispatch => {
+    const res = await Axios.delete(`/api/lists/${listId}/tasks/${taskId}/comments/${commentId}`)
+
+    if (res.data.errors) {
+      return res.data.errors
+    }
+
+    return dispatch(loadLists())
+
+  }
+}
+
 
 // THIS IS A BAD WAY OF HANDLING THIS,
 // I WOULD RATHER GO BACK AND CHANGE THIS TO BE A DICTIONARY
