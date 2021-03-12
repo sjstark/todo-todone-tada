@@ -105,9 +105,10 @@ export const addTask = (task, listId) => {
       }
     }
 
-    const res = await Axios.post(`/api/lists/${listId}/tasks`, formData, config)
+    Axios.post(`/api/lists/${listId}/tasks`, formData, config)
       .then(res => {
         const list = res.data;
+        console.log(list)
         return dispatch(_updateList(list))
       })
       .catch((err) => {
@@ -122,10 +123,10 @@ export const addTask = (task, listId) => {
 // I WOULD RATHER GO BACK AND CHANGE THIS TO BE A DICTIONARY
 // BUT DUE TO TIME I'M MOVING FORWARD
 
-const _updateTitle = (state, list) => {
+const _copyListToUpdate = (state, list) => {
   for (let i = 0; i < state.length; i++) {
     if (state[i].id == list.id) {
-      state[i].title = list.title
+      state[i] = { ...list }
       return
     }
   }
@@ -150,7 +151,7 @@ function listReducer(state = initialState, action) {
 
     case UPDATE_LIST:
       newState = [...state]
-      _updateTitle(newState, action.payload)
+      _copyListToUpdate(newState, action.payload)
       return newState
 
     default:
