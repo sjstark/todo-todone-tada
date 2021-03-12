@@ -66,21 +66,19 @@ export const deleteList = (listId) => {
 
 
 
-let initialState = {
-  lists: []
-}
+let initialState = []
 
 function listReducer(state = initialState, action) {
   let newState;
   switch (action.type) {
 
     case SET_LISTS:
-      newState = { lists: action.payload }
+      newState = [...action.payload]
       return newState;
 
     case ADD_LIST:
-      newState = Object.assign({}, state)
-      newState.lists.push(action.payload)
+      newState = [...state]
+      newState.push(action.payload)
       return newState
 
     default:
