@@ -108,7 +108,6 @@ export const addTask = (task, listId) => {
     Axios.post(`/api/lists/${listId}/tasks`, formData, config)
       .then(res => {
         const list = res.data;
-        console.log(list)
         return dispatch(_updateList(list))
       })
       .catch((err) => {
@@ -117,6 +116,23 @@ export const addTask = (task, listId) => {
 
   }
 }
+
+
+export const toggleTask = (listId, taskId) => {
+  return async dispatch => {
+
+    Axios.post(`/api/lists/${listId}/tasks/${taskId}/toggle`)
+      .then(res => {
+        const list = res.data;
+        return dispatch(_updateList(list))
+      })
+      .catch((err) => {
+        return err.response
+      })
+
+  }
+}
+
 
 
 // THIS IS A BAD WAY OF HANDLING THIS,

@@ -2,6 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+def sortingFunc(e):
+    return e["id"]
+
+
 class List(db.Model):
     __tablename__ = "lists"
 
@@ -12,10 +16,14 @@ class List(db.Model):
         return '<List %r>' % self.title
 
     def to_dict(self):
+        tasks = [task.to_dict() for task in self.tasks]
+        if tasks:
+            tasks.sort(key=sortingFunc)
+        print(tasks)
         return {
             "id": self.id,
             "title": self.title,
-            "tasks": [task.to_dict() for task in self.tasks]
+            "tasks": tasks
         }
 
 
@@ -37,12 +45,13 @@ class Task(db.Model):
         return '<Task %r>' % self.title
 
     def to_dict(self):
+        comments = [comment.to_dict() for comment in self.comments]
         return {
             "id": self.id,
             "title": self.title,
             "description": self.description,
             "isComplete": self.is_complete,
-            "comments": [comment.to_dict() for comment in self.comments]
+            "comments": comments
         }
 
 

@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
 } from '@material-ui/core'
 
@@ -83,7 +82,7 @@ export default function ListElement({ list }) {
           </Box>
         </Box>
         <List>
-          {tasks.map(task => <Task task={task} key={task.id} />)}
+          {tasks && tasks.map(task => <Task listId={list.id} task={task} key={task.id} />)}
         </List>
       </Box >
 

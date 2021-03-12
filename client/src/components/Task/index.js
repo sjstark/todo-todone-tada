@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 
+import { useDispatch } from 'react-redux'
+
+import { toggleTask } from '../../store/list'
+
 import {
   Button,
   ListItem,
@@ -17,14 +21,15 @@ import {
   DialogContentText,
   TextField,
 } from '@material-ui/core'
+
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 
-export default function Task({ task }) {
+export default function Task({ listId, task }) {
+  const dispatch = useDispatch()
 
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
@@ -33,7 +38,7 @@ export default function Task({ task }) {
   const { comments } = task
 
   const handleToggle = () => {
-
+    dispatch(toggleTask(listId, task.id))
   }
 
   const closeCommentDialog = () => {
@@ -61,7 +66,6 @@ export default function Task({ task }) {
             edge="start"
             checked={task.isComplete}
             onChange={handleToggle}
-
           />
         </ListItemIcon>
         <ListItemText>

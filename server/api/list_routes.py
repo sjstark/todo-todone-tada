@@ -126,6 +126,18 @@ def delete_task(list_id, task_id):
     return {'errors': 'There was an error with your request'}, 400
 
 
+@list_routes.route('/<int:list_id>/tasks/<int:task_id>/toggle', methods=["POST"])
+def toggle_task(list_id, task_id):
+    if task_id:
+        task = Task.query.get(task_id)
+        task.is_complete = not task.is_complete
+        db.session.commit()
+        # It would be better to just return the task, but would require some rebuild on the frontend
+        list = List.query.get(list_id)
+        return list.to_dict()
+    return {'errors': 'There was an error with your request'}, 400
+
+
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments', methods=["GET"])
 def get_all_comments(list_id, task_id):
     """
