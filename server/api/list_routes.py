@@ -24,7 +24,7 @@ def get_all_lists():
     """
     GETs all lists and returns as JSON
     """
-    lists = List.query.all()
+    lists = List.query.order_by(List.id).all()
     data = [list.to_dict() for list in lists]
     return jsonify(data)
 
@@ -69,6 +69,17 @@ def update_list_by_id(list_id):
                 return {'errors': validation_errors_to_error_messages(form.errors)}, 400
             return list.to_dict()
     return {'errors': ['The requested list does not exist']}, 404
+
+
+@list_routes.route('/<int:list_id>', methods=["DELETE"])
+def delete_list(list_id):
+    if list_id:
+        list = List.query.get(list_id)
+        db.session.delete(list)
+        db.session.commit()
+        return 'success'
+    return {'errors': 'There was an error with your request'}, 400
+
 
 @list_routes.route('/<int:list_id>/tasks', methods=["GET"])
 def get_all_tasks(list_id):

@@ -20,7 +20,7 @@ import {
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AddCommentIcon from '@material-ui/icons/AddComment';
-import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 export default function Task({ task }) {
@@ -44,6 +44,10 @@ export default function Task({ task }) {
     closeCommentDialog()
   }
 
+  const handleDelete = () => {
+
+  }
+
   const handleClick = () => {
     setOpen(!open)
   }
@@ -62,8 +66,10 @@ export default function Task({ task }) {
         <ListItemText>
           {task.title}
         </ListItemText>
-        <IconButton >
-          <EditIcon />
+        <IconButton
+          onClick={handleDelete}
+        >
+          <DeleteIcon />
         </IconButton>
         <IconButton onClick={() => setOpenAdd(!openAdd)} >
           <AddCommentIcon />

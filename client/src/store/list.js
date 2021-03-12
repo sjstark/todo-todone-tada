@@ -88,7 +88,7 @@ export const deleteList = (listId) => {
       return res.data.errors
     }
 
-    return loadLists()
+    return dispatch(loadLists())
 
   }
 }
