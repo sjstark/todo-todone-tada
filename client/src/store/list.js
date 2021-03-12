@@ -133,6 +133,19 @@ export const toggleTask = (listId, taskId) => {
   }
 }
 
+export const deleteTask = (listId, taskId) => {
+  return async dispatch => {
+    const res = await Axios.delete(`/api/lists/${listId}/tasks/${taskId}`)
+
+    if (res.data.errors) {
+      return res.data.errors
+    }
+
+    return dispatch(loadLists())
+
+  }
+}
+
 
 
 // THIS IS A BAD WAY OF HANDLING THIS,

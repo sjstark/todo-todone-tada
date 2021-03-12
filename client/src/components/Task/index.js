@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { toggleTask } from '../../store/list'
+import { toggleTask, deleteTask } from '../../store/list'
 
 import {
   Button,
@@ -34,6 +34,7 @@ export default function Task({ listId, task }) {
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [openAdd, setOpenAdd] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
 
   const { comments } = task
 
@@ -50,22 +51,25 @@ export default function Task({ listId, task }) {
     closeCommentDialog()
   }
 
-  const handleDelete = () => {
-
+  const handleDelete = (e) => {
+    e.stopPropagation()
+    dispatch(deleteTask(listId, task.id))
   }
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.stopPropagation()
     setOpen(!open)
   }
 
   return (
     <>
-      <ListItem>
+      <ListItem button onClick={() => { setShowDetails(true) }}>
         <ListItemIcon>
           <Checkbox
             edge="start"
             checked={task.isComplete}
             onChange={handleToggle}
+            onClick={(e) => { e.stopPropagation() }}
           />
         </ListItemIcon>
         <ListItemText>
@@ -76,7 +80,10 @@ export default function Task({ listId, task }) {
         >
           <DeleteIcon />
         </IconButton>
-        <IconButton onClick={() => setOpenAdd(!openAdd)} >
+        <IconButton onClick={(e) => {
+          e.stopPropagation()
+          setOpenAdd(!openAdd)
+        }} >
           <AddCommentIcon />
         </IconButton>
         <IconButton onClick={handleClick}>
@@ -127,6 +134,15 @@ export default function Task({ listId, task }) {
         <Button onClick={handleCommentCreate} color="primary">
           Add Comment
         </Button>
+      </Dialog>
+
+      <Dialog open={showDetails} onClose={() => { setShowDetails(false) }}>
+        <DialogTitle>{task.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {`${task.description}`}
+          </DialogContentText>
+        </DialogContent>
       </Dialog>
 
     </>
