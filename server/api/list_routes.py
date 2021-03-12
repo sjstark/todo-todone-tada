@@ -83,7 +83,7 @@ def get_all_tasks(list_id):
 
 
 @list_routes.route('/<int:list_id>/tasks', methods=["POST"])
-def create_new_tasks(list_id):
+def create_new_task(list_id):
     if list_id:
         list = List.query.get(list_id)
         if list:
@@ -106,7 +106,7 @@ def create_new_tasks(list_id):
 
 
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>', methods=["DELETE"])
-def delete_tasks(list_id, task_id):
+def delete_task(list_id, task_id):
     if task_id:
         task = Task.query.get(task_id)
         db.session.delete(task)
@@ -127,7 +127,7 @@ def get_all_comments(list_id, task_id):
     return {'errors': 'There was an error with your request'}, 400
 
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments', methods=["POST"])
-def get_all_comments(list_id, task_id):
+def create_new_comment(list_id, task_id):
     if task_id:
         task = List.query.get(task_id)
         if task:
@@ -146,7 +146,7 @@ def get_all_comments(list_id, task_id):
     return {'errors': 'There was an error with your request'}, 400
 
 @list_routes.route('/<int:list_id>/tasks/<int:task_id>/comments/<int:comment_id>', methods=["DELETE"])
-def get_all_comments(list_id, task_id, comment_id):
+def delete_comment(list_id, task_id, comment_id):
     if comment_id:
         task = Task.query.get(comment_id)
         db.session.delete(task)

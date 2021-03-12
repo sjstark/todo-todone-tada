@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { loadLists } from './store/list';
+import { useDispatch, connect } from 'react-redux'
 
-function App() {
+function App(lists) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadLists())
+  }, [dispatch])
+
+  useEffect(() => {
+    console.log(lists)
+  }, [lists])
+
   return (
 
 
@@ -13,4 +25,6 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = state => ({ lists: state.lists })
+
+export default connect(mapStateToProps)(App);
