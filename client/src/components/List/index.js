@@ -50,6 +50,7 @@ export default function ListElement({ list }) {
   const handleTaskCreate = () => {
     dispatch(addTask(task, list.id))
     handleCloseAdd()
+    task = { title: "", description: "" }
   }
 
   const handleDelete = () => {
